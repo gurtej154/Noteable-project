@@ -1,7 +1,7 @@
 const notes = require("express").Router();
 const noteFile = require("../db/db.json");
 const fs = require("fs");
-const { uuid } = require("uuidv4");
+const { v4: uuid4 } = require("uuid");
 const path = "../db/db.json";
 const util = require("util");
 const readFromFile = util.promisify(fs.readFile);
@@ -28,7 +28,7 @@ notes.post("/", (req, res) => {
           const newNote = {
             title,
             text,
-            id: `:${uuid()}`,
+            id: `:${uuid4()}`,
           };
           console.log(data);
           const parsedData = JSON.parse(data);
