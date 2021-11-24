@@ -1,53 +1,47 @@
 const notes = require("express").Router();
-const noteFile = require("../db/db.json");
-const fs = require("fs");
-const { v4: uuid4 } = require("uuid");
-const path = "../db/db.json";
-const util = require("util");
-const readFromFile = util.promisify(fs.readFile);
+const {
+  readFromFile,
+  readAndAppend,
+  writeToFile,
+} = require("../helpers/fsUtils");
+const { v4: uuidv4 } = require("uuid");
 
+// GET Route for retrieving all the notes
 notes.get("/", (req, res) => {
-  readFromFile(require("path").resolve(__dirname, "../db/db.json")).then(
-    (data) => res.json(JSON.parse(data))
-  );
+  readFromFile("./db/db.json").then((data) => res.json(JSON.parse(data)));
 });
 
+// POST route for adding a new note
 notes.post("/", (req, res) => {
-  console.log(req.body);
+  if (req.body) {
+    const newNote = {
+      title: req.body.title,
+      text: req.body.text,
+      id: uuidv4(),
+    };
 
-  fs.readFile(
-    require("path").resolve(__dirname, "../db/db.json"),
-    "utf8",
-    (err, data) => {
-      if (err) {
-        console.log(err);
-      } else {
-        const { title, text } = req.body;
-
-        if (title && text) {
-          const newNote = {
-            title,
-            text,
-            id: `:${uuid4()}`,
-          };
-          console.log(data);
-          const parsedData = JSON.parse(data);
-          console.log(parsedData);
-          parsedData.push(newNote);
-          fs.writeFile(
-            require("path").resolve(__dirname, "../db/db.json"),
-            JSON.stringify(parsedData, null, 4),
-            (err) => (err ? console.log(err) : console.log(parsedData))
-          );
-        }
-      }
-    }
-  );
-  res.json(`New note successfully added!`);
+    readAndAppend(newNote, "./db/db.json");
+    res.json("Note successfully added.");
+  } else {
+    res.json("There was an error adding the note.");
+  }
 });
 
-notes.delete("/", (req, res) => {
-  console.log(req.params.id);
+// DELETE Route for removing a specific note
+notes.delete("/:id", (req, res) => {
+  const noteId = req.params.id;
+  readFromFile("./db/db.json")
+    .then((data) => JSON.parse(data))
+    .then((json) => {
+      // Make a new array of notes except for the one with the ID provided in the URL
+      const result = json.filter((note) => note.id !== noteId);
+
+      // Save that array to the filesystem
+      writeToFile("./db/db.json", result);
+
+      // Respond to the DELETE request
+      res.json(`${noteId} has been deleted 🗑️`);
+    });
 });
 
 module.exports = notes;
