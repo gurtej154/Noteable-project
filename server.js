@@ -2,7 +2,7 @@
 
 const express = require("express");
 const path = require("path");
-const api = require("./develop/routes/index");
+const api = require("./routes/index.js");
 
 // Sets up and initializes the Express App server
 const app = express();
@@ -26,12 +26,12 @@ app.use("/api", api);
 
 // GET Route for homepage
 app.get("/", (req, res) =>
-  res.sendFile(path.join(__dirname, "./develop/public/index.html"))
+  res.sendFile(path.join(__dirname, "/public/index.html"))
 );
 
 // GET Route for notes
 app.get("/notes", (req, res) =>
-  res.sendFile(path.join(__dirname, "./develop/public/notes.html"))
+  res.sendFile(path.join(__dirname, "/public/notes.html"))
 );
 
 // wildcard redirect to homepage
