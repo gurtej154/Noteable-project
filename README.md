@@ -1,4 +1,4 @@
-# Team Profile Generator
+# Noteable
 
 ![License:MIT](https://img.shields.io/badge/MIT-License-yellowgreen)
 
@@ -8,7 +8,7 @@
 
 - [Description](#description)
 - [Installation](#installation)
-- [User-Interface]
+- [User-Interface](#User-Interface)
 - [Contributing](#contributing)
 - [Tests](#tests)
 - [Questions](#questions)
@@ -25,7 +25,7 @@ Creates and lists notes within the application for users to use for daily tasks 
 
 ## Installation
 
-No installation is required for to use this application, click on this following link ![Noteable-note-taker](https://noteable-note-taker.herokuapp.com/)
+No installation is required for to use this application, click on this following link [Noteable-note-taker](https://noteable-note-taker.herokuapp.com/)
 
 ---
 
